@@ -1,0 +1,77 @@
+cart={
+
+      product1: {
+        img:...
+        price:..
+        name:..
+        qty:2
+      },
+      product2: {
+        img:...
+        price:..
+        name:..
+        qty:1
+      },
+      product3: {
+        img:...
+        price:..
+        name:..
+        qty:1
+      }
+}
+
+
+- kiem tra co product thi tang len  QTY 2
+- k co thi mua them mua lai qty:1
+
+
+---------
+khi click ADD TO CART:
+từ vị tri thang nay (this) dựa theo class lay: img, name, price, id
+
+và tao objcon nhu sau:
+  {
+    img:...
+    price:..
+    name:..
+    qty:1
+  }
+
+va sau do dua objcon nay vao objCha, va dung chinh ID cua product làm key
+(ID chua co, nên tự them vao trong html, 6 product 6 ID)
+
+{
+  product1: {
+    img:...
+    price:..
+    name:..
+    qty:1
+  }
+}
+=> dua vao local
+{
+  product1: {
+    img:...
+    price:..
+    name:..
+    qty:2
+  },
+  product2: {
+    img:...
+    price:..
+    name:..
+    qty:1
+  },
+  ...
+}
+
+va chu y giup a, 1 product mua nhieu lan thi tang qty cua no len
+
+
+
+
+viet ham click nut +:
+- tang qty va total len mà k cần reload trang 
++ một lần bấm vào sẽ lấy giá trị ra và trực tiếp cộng nó trên trang .
++ sau khi xong action trên thì ra sẽ đưa nó về vị trí cũ và lấy qty * giá = giá tổng.
+- luu qty mới vao product có trong local, de reload hien thi ra gia tri moi
