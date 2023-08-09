@@ -241,111 +241,7 @@
               </tr>
             </thead>
 
-            <tbody>
-              <tr>
-                <td class="cart_product">
-                  <a href=""><img src="images/cart/one.png" alt="" /></a>
-                </td>
-                <td class="cart_description">
-                  <h4><a href="">Colorblock Scuba</a></h4>
-                  <p>Web ID: 1089772</p>
-                </td>
-                <td class="cart_price">
-                  <p>$59</p>
-                </td>
-                <td class="cart_quantity">
-                  <div class="cart_quantity_button">
-                    <a class="cart_quantity_up" href=""> + </a>
-                    <input
-                      class="cart_quantity_input"
-                      type="text"
-                      name="quantity"
-                      value="1"
-                      autocomplete="off"
-                      size="2"
-                    />
-                    <a class="cart_quantity_down" href=""> - </a>
-                  </div>
-                </td>
-                <td class="cart_total">
-                  <p class="cart_total_price">$59</p>
-                </td>
-                <td class="cart_delete">
-                  <a class="cart_quantity_delete" href=""
-                    ><i class="fa fa-times"></i
-                  ></a>
-                </td>
-              </tr>
-
-              <tr>
-                <td class="cart_product">
-                  <a href=""><img src="images/cart/two.png" alt="" /></a>
-                </td>
-                <td class="cart_description">
-                  <h4><a href="">Colorblock Scuba</a></h4>
-                  <p>Web ID: 1089772</p>
-                </td>
-                <td class="cart_price">
-                  <p>$59</p>
-                </td>
-                <td class="cart_quantity">
-                  <div class="cart_quantity_button">
-                    <a class="cart_quantity_up" href=""> + </a>
-                    <input
-                      class="cart_quantity_input"
-                      type="text"
-                      name="quantity"
-                      value="1"
-                      autocomplete="off"
-                      size="2"
-                    />
-                    <a class="cart_quantity_down" href=""> - </a>
-                  </div>
-                </td>
-                <td class="cart_total">
-                  <p class="cart_total_price">$59</p>
-                </td>
-                <td class="cart_delete">
-                  <a class="cart_quantity_delete" href=""
-                    ><i class="fa fa-times"></i
-                  ></a>
-                </td>
-              </tr>
-              <tr>
-                <td class="cart_product">
-                  <a href=""><img src="images/cart/three.png" alt="" /></a>
-                </td>
-                <td class="cart_description">
-                  <h4><a href="">Colorblock Scuba</a></h4>
-                  <p>Web ID: 1089772</p>
-                </td>
-                <td class="cart_price">
-                  <p>$59</p>
-                </td>
-                <td class="cart_quantity">
-                  <div class="cart_quantity_button">
-                    <a class="cart_quantity_up" href=""> + </a>
-                    <input
-                      class="cart_quantity_input"
-                      type="text"
-                      name="quantity"
-                      value="1"
-                      autocomplete="off"
-                      size="2"
-                    />
-                    <a class="cart_quantity_down" href=""> - </a>
-                  </div>
-                </td>
-                <td class="cart_total">
-                  <p class="cart_total_price">$59</p>
-                </td>
-                <td class="cart_delete">
-                  <a class="cart_quantity_delete" href=""
-                    ><i class="fa fa-times"></i
-                  ></a>
-                </td>
-              </tr>
-            </tbody>
+            <tbody></tbody>
           </table>
         </div>
       </div>
@@ -417,10 +313,10 @@
           <div class="col-sm-6">
             <div class="total_area">
               <ul>
-                <li>Cart Sub Total <span>$59</span></li>
-                <li>Eco Tax <span>$2</span></li>
-                <li>Shipping Cost <span>Free</span></li>
-                <li>Total <span>$61</span></li>
+                <li>Cart Sub Total <span class="total_cart">$59</span></li>
+                <li>Eco Tax <span class="ecotax">$2</span></li>
+                <li>Shipping Cost <span class="shipping-cost">Free</span></li>
+                <li>Total <span class="total_checkout">$61</span></li>
               </ul>
               <a class="btn btn-default update" href="">Update</a>
               <a class="btn btn-default check_out" href="">Check Out</a>
@@ -620,6 +516,10 @@
         }
         // alert("123");
         // console.log(yy);
+        var s = 0;
+        var check_out = 0;
+        var ecotax = $("li").find("span.ecotax").text().replace("$", " ");
+        console.log(ecotax);
 
         Object.keys(yy).map(function (key, index) {
           var price = yy[key]["price"].replace("$", "");
@@ -675,8 +575,13 @@
             "></a>" +
             "</td>" +
             "</tr>";
+          s = s + total;
         });
         $("table tbody").append(xx);
+        console.log(s);
+        check_out = s + parseFloat(ecotax);
+        $("li").find("span.total_cart").text(s);
+        $("li").find("span.total_checkout").text(check_out);
         $("a.cart_quantity_up").click(function (e) {
           e.preventDefault();
           var jj = $(this)
@@ -750,8 +655,6 @@
           if (kk <= 1) {
             alert("Counter reached minimum. Stopping the action.");
             // Không thực hiện thêm hành động nếu giá trị đã đạt đến 0
-          } else if (kk == 0) {
-            // bí rồi
           }
           let xx = localStorage.getItem("cart");
           if (xx) {
@@ -764,7 +667,12 @@
               // alert("123");
               //lấy id ra , kiểm tra id có trong local
             }
+            if (xx[key]["qty"] == 0) {
+              delete xx[key]; // Xóa phần tử trong mảng xx
+              $(this).closest("tr").remove();
+            }
           });
+
           console.log(xx);
           localStorage.setItem("cart", JSON.stringify(xx));
           // location.reload();
@@ -775,7 +683,10 @@
         // console.log(yy);
         $("a.cart_quantity_delete").click(function (e) {
           e.preventDefault();
-
+          //e xoa the TR cua product e đang click la dc
+          // con xoa trong local, thi e goi local ra,
+          // e kiem tra co id co k
+          // co thi e xoa key cua no di
           var xx = localStorage.getItem("cart");
           if (xx) {
             xx = JSON.parse(xx);
@@ -797,11 +708,8 @@
 
           // Xóa hàng (row) trên giao diện
           $(this).closest("tr").remove();
-          //e xoa the TR cua product e đang click la dc
-          // con xoa trong local, thi e goi local ra,
-          // e kiem tra co id co k
-          // co thi e xoa key cua no di
         });
+        localStorage.setItem("cart", JSON.stringify(yy));
       });
     </script>
   </body>
