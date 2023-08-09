@@ -519,7 +519,7 @@
         var s = 0;
         var check_out = 0;
         var ecotax = $("li").find("span.ecotax").text().replace("$", " ");
-        console.log(ecotax);
+        // console.log(ecotax);
 
         Object.keys(yy).map(function (key, index) {
           var price = yy[key]["price"].replace("$", "");
@@ -577,6 +577,7 @@
             "</tr>";
           s = s + total;
         });
+        total_cart = s;
         $("table tbody").append(xx);
         console.log(s);
         check_out = s + parseFloat(ecotax);
@@ -603,7 +604,9 @@
           // alert(price);
           let total = parseFloat(price) * kk;
           // alert(total);
+          let total_checkout = $("li").find("span.total_checkout").text();
 
+          // console.log(total_checkout);
           var zz = $(this)
             .closest("tr")
             .find("td.cart_description p")
@@ -621,6 +624,10 @@
               //lấy id ra , kiểm tra id có trong local
             }
           });
+          let s = 0;
+          s = parseInt(price) + parseInt(total_checkout);
+          // console.log(s);
+          $("li").find("span.total_checkout").text(s);
           console.log(xx);
           localStorage.setItem("cart", JSON.stringify(xx));
           // location.reload();
@@ -632,6 +639,8 @@
             .closest("div.cart_quantity_button")
             .find("input")
             .val();
+          let total_checkout = $("li").find("span.total_checkout").text();
+
           var kk = parseInt(jj) - 1;
           // alert(kk);
           $(this).closest("div.cart_quantity_button").find("input").val(kk);
@@ -672,7 +681,13 @@
               $(this).closest("tr").remove();
             }
           });
-
+          if (kk == 0) {
+            $(this).closest("tr").remove();
+          }
+          let s = 0;
+          s = parseInt(total_checkout) - parseInt(price);
+          // console.log(s);
+          $("li").find("span.total_checkout").text(s);
           console.log(xx);
           localStorage.setItem("cart", JSON.stringify(xx));
           // location.reload();
@@ -683,10 +698,35 @@
         // console.log(yy);
         $("a.cart_quantity_delete").click(function (e) {
           e.preventDefault();
-          //e xoa the TR cua product e đang click la dc
-          // con xoa trong local, thi e goi local ra,
-          // e kiem tra co id co k
-          // co thi e xoa key cua no di
+          var jj = $(this)
+            .closest(
+              "div.cart_quantity div.cart_quantity_button div.cart_quantity_input"
+            )
+            .find("input.cart_quantity_input")
+            .val();
+          let total_checkout = $("li").find("span.total_checkout").text();
+
+          var jj = parseInt(jj);
+          // alert(kk);
+          $(this).closest("div.cart_quantity_button").find("input").val(jj);
+          // - lay price
+          // - tong = price * qty moi
+          // - set tong
+
+          let price = $(this)
+            .closest("tr")
+            .find("td.cart_price p")
+            .text()
+            .replace("$", "");
+          // alert(price);
+          let total = parseFloat(price) * jj;
+          // alert(total);
+
+          let s = 0;
+          s = parseInt(total_checkout) - parseInt(total);
+          // console.log(s);
+          $("li").find("span.total_checkout").text(s);
+
           var xx = localStorage.getItem("cart");
           if (xx) {
             xx = JSON.parse(xx);
@@ -702,7 +742,6 @@
               delete xx[key]; // Xóa phần tử trong mảng xx
             }
           });
-
           // Lưu mảng đã cập nhật vào LocalStorage
           localStorage.setItem("cart", JSON.stringify(xx));
           // Xóa hàng (row) trên giao diện
