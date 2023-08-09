@@ -774,7 +774,28 @@
         // localStorage.setItem("cart2", JSON.stringify(yy));
         // console.log(yy);
         $("a.cart_quantity_delete").click(function (e) {
-          e.preventDefault;
+          e.preventDefault();
+
+          var xx = localStorage.getItem("cart");
+          if (xx) {
+            xx = JSON.parse(xx);
+          }
+
+          var zz = $(this)
+            .closest("tr")
+            .find("td.cart_description p")
+            .attr("id");
+
+          Object.keys(xx).map(function (key, index) {
+            if (xx[key]["id"] == zz) {
+              delete xx[key]; // Xóa phần tử trong mảng xx
+            }
+          });
+
+          // Lưu mảng đã cập nhật vào LocalStorage
+          localStorage.setItem("cart", JSON.stringify(xx));
+
+          // Xóa hàng (row) trên giao diện
           $(this).closest("tr").remove();
           //e xoa the TR cua product e đang click la dc
           // con xoa trong local, thi e goi local ra,
