@@ -698,34 +698,19 @@
         // console.log(yy);
         $("a.cart_quantity_delete").click(function (e) {
           e.preventDefault();
-          var jj = $(this)
-            .closest(
-              "div.cart_quantity div.cart_quantity_button div.cart_quantity_input"
-            )
-            .find("input.cart_quantity_input")
-            .val();
-          let total_checkout = $("li").find("span.total_checkout").text();
 
-          var jj = parseInt(jj);
-          // alert(kk);
-          $(this).closest("div.cart_quantity_button").find("input").val(jj);
-          // - lay price
-          // - tong = price * qty moi
-          // - set tong
+          let total_checkout = $("li").find("span.total_checkout").text();
 
           let price = $(this)
             .closest("tr")
-            .find("td.cart_price p")
+            .find("td.cart__total_price p")
             .text()
             .replace("$", "");
-          // alert(price);
-          let total = parseFloat(price) * jj;
-          // alert(total);
 
           let s = 0;
-          s = parseInt(total_checkout) - parseInt(total);
-          // console.log(s);
-          $("li").find("span.total_checkout").text(s);
+          s = parseInt(total_checkout) - parseFloat(price);
+          console.log(s);
+          // $("li").find("span.total_checkout").text(s);
 
           var xx = localStorage.getItem("cart");
           if (xx) {
